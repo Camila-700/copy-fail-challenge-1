@@ -43,7 +43,7 @@ RUN useradd -m -s /bin/bash student && \
     usermod -aG sudo student
 
 # ── Directorio de trabajo ──────────────────────────────────────────────────────
-WORKDIR /workspaces/copy-fail-challenge
+WORKDIR /workspaces/copy-fail-challenge-1
 
 # Punto de entrada por defecto
 CMD ["/bin/bash"]
