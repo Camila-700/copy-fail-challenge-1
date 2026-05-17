@@ -1,0 +1,41 @@
+=== HITO 1: KERNEL VULNERABLE CONFIRMADO ===
+Fecha:
+Sun May 17 07:42:20 PM EDT 2026
+
+Hostname:
+debian-proyect
+
+Kernel:
+6.12.74+deb13+1-amd64
+
+Sistema operativo:
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.4
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+Identidad actual:
+uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+camila
+
+Modulos relacionados con ALG:
+algif_aead             12288  0
+af_alg                 36864  1 algif_aead
+crypto_null            16384  1 algif_aead
+
+Confirmacion de algif_aead en /proc/modules:
+algif_aead 12288 0 - Live 0x0000000000000000
+af_alg 36864 1 algif_aead, Live 0x0000000000000000
+crypto_null 16384 1 algif_aead, Live 0x0000000000000000
+
+Nota:
+El laboratorio fue ejecutado en una máquina virtual Debian 13 usando Oracle VirtualBox.
+Se adjunta captura adicional en evidence/hito1_virtualbox_capture.jpeg.
+Hostname de la VM: debian-proyect.
+Usuario usado: camila.
