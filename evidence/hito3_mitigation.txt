@@ -1,0 +1,53 @@
+=== HITO 3: MITIGACION TEMPORAL ===
+Mon May 18 13:25:08 EDT 2026
+debian-proyect
+6.12.74+deb13+1-amd64
+root
+uid=0(root) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Modulo antes de rmmod:
+algif_aead             12288  0
+af_alg                 36864  1 algif_aead
+crypto_null            16384  3 authencesn,authenc,algif_aead
+
+Aplicando rmmod algif_aead:
+
+Modulo despues de rmmod:
+algif_aead NO cargado - mitigacion activa
+
+Intento de exploit post-mitigacion:
+
+Identidad despues del intento:
+root
+uid=0(root) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Nota de verificacion:
+El intento post-mitigacion se ejecuto despues de remover algif_aead. La identidad sigue siendo root porque la sesion ya venia de la shell root obtenida en el Hito 2; la evidencia principal es que algif_aead ya no aparece cargado.
+
+=== VERIFICACION ADICIONAL: BLOQUEO PERSISTENTE DEL MODULO ===
+Fecha:
+Mon May 18 05:19:26 PM EDT 2026
+
+Regla creada en /etc/modprobe.d/disable-algif.conf:
+install algif_aead /bin/false
+
+Estado del modulo despues del bloqueo:
+algif_aead NO cargado - mitigacion activa
+
+Intento de exploit con modulo bloqueado:
+Traceback (most recent call last):
+  File "/home/camila/copy-fail-lab/copy_fail_exp.py", line 9, in <module>
+    while i<len(e):c(f,i,e[i:i+4]);i+=4
+                   ~^^^^^^^^^^^^^^
+  File "/home/camila/copy-fail-lab/copy_fail_exp.py", line 5, in c
+    a=s.socket(38,5,0);a.bind(("aead","authencesn(hmac(sha256),cbc(aes))"));h=279;v=a.setsockopt;v(h,1,d('0800010000000010'+'0'*64));v(h,5,None,4);u,_=a.accept();o=t+4;i=d('00');u.sendmsg([b"A"*4+c],[(h,3,i*4),(h,2,b'\x10'+i*19),(h,4,b'\x08'+i*3),],32768);r,w=g.pipe();n=g.splice;n(f,w,o,offset_src=0);n(r,u.fileno(),o)
+                       ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory
+
+Identidad despues del intento:
+camila
+uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Resultado:
+El exploit falla despues de bloquear algif_aead con install algif_aead /bin/false.
+Interpretacion: el error FileNotFoundError es esperado porque algif_aead fue bloqueado; el exploit fallo y el usuario permanecio como camila, no root.
