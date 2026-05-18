@@ -1,0 +1,28 @@
+=== HITO 2: EXPLOIT EXITOSO ===
+Fecha:
+Sun May 17 20:06:55 EDT 2026
+
+Hostname:
+debian-proyect
+
+Kernel:
+6.12.74+deb13+1-amd64
+
+Identidad POST-exploit:
+root
+uid=0(root) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Modulo algif_aead:
+algif_aead             12288  0
+af_alg                 36864  1 algif_aead
+crypto_null            16384  3 authencesn,authenc,algif_aead
+
+SHA256 del exploit usado:
+d401e7d1c00605749d6c617ace73ab20a762b72e41c2e1590331596e38219a61  copy_fail_exp.py
+
+Archivo del exploit:
+-rw-rw-r-- 1 camila camila 731 May 17 20:02 copy_fail_exp.py
+731 copy_fail_exp.py
+
+Nota:
+El exploit se ejecuto en Debian 13 dentro de Oracle VirtualBox.
