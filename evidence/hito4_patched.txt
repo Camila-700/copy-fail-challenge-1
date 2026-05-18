@@ -1,0 +1,46 @@
+=== HITO 4: PARCHE PERMANENTE / SISTEMA ACTUALIZADO ===
+Fecha:
+Mon May 18 05:53:05 PM EDT 2026
+
+Hostname:
+debian-proyect
+
+Kernel despues de actualizar:
+6.12.88+deb13-amd64
+
+Sistema operativo:
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.5
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+Identidad antes/despues del intento:
+camila
+uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Archivo de bloqueo temporal:
+ls: cannot access '/etc/modprobe.d/disable-algif.conf': No such file or directory
+No existe disable-algif.conf; no se esta usando la mitigacion temporal.
+
+Estado de algif_aead:
+algif_aead             12288  0
+af_alg                 36864  1 algif_aead
+
+Intento de exploit post-update:
+
+Salida capturada del exploit post-update:
+Password: 
+su: Authentication failure
+
+Identidad final:
+camila
+uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),101(netdev),102(scanner),106(bluetooth),108(lpadmin)
+
+Resultado:
+Despues de actualizar el kernel, el exploit ya no obtiene root. El usuario permanece como camila.
