@@ -39,3 +39,93 @@ El laboratorio fue ejecutado en una máquina virtual Debian 13 usando Oracle Vir
 Se adjunta captura adicional en evidence/hito1_virtualbox_capture.jpeg.
 Hostname de la VM: debian-proyect.
 Usuario usado: camila.
+
+cat >> evidence/hito1_vuln_confirmed.txt <<'EOF'
+
+=== COMANDOS REGISTRADOS EN HISTORIAL / USADOS PARA ESTA EVIDENCIA ===
+
+mkdir -p ~/copy-fail-lab/evidence
+
+{
+  echo "=== PASO 1: INFORMACION INICIAL DE LA VM ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Hostname:";
+  hostname;
+  echo "";
+  echo "Usuario actual:";
+  whoami;
+  echo "";
+  echo "Identidad completa:";
+  id;
+  echo "";
+  echo "Sistema operativo:";
+  cat /etc/os-release;
+  echo "";
+  echo "Version del kernel:";
+  uname -r;
+  echo "";
+  echo "Arquitectura:";
+  uname -m;
+} | tee evidence/paso1_info_vm.txt
+
+{
+  echo "=== PASO 2: REVISION DE MODULOS AF_ALG / ALGIF ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Modulos relacionados con alg:";
+  lsmod | grep -i alg || echo "No se encontraron modulos con lsmod";
+  echo "";
+  echo "Busqueda de algif_aead en /proc/modules:";
+  grep algif_aead /proc/modules || echo "algif_aead NO aparece cargado";
+  echo "";
+  echo "Busqueda general de algif:";
+  grep algif /proc/modules || echo "No aparecen modulos algif cargados";
+} | tee evidence/paso2_modulos_algif.txt
+
+{
+  echo "=== PASO 3: INTENTO DE CARGAR MODULO ALGIF_AEAD ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Usuario actual:";
+  whoami;
+  id;
+  echo "";
+  echo "Intentando cargar algif_aead con sudo modprobe:";
+  sudo modprobe algif_aead;
+  echo "";
+  echo "Resultado de lsmod:";
+  lsmod | grep -i alg || echo "No se encontraron modulos con lsmod";
+  echo "";
+  echo "Resultado en /proc/modules:";
+  grep algif /proc/modules || echo "No aparecen modulos algif cargados";
+} | tee evidence/paso3_cargar_algif_aead.txt
+
+{
+  echo "=== HITO 1: KERNEL VULNERABLE CONFIRMADO ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Hostname:";
+  hostname;
+  echo "";
+  echo "Kernel:";
+  uname -r;
+  echo "";
+  echo "Sistema operativo:";
+  cat /etc/os-release;
+  echo "";
+  echo "Identidad actual:";
+  id;
+  whoami;
+  echo "";
+  echo "Modulos relacionados con ALG:";
+  lsmod | grep -i alg || echo "No se encontraron modulos ALG";
+  echo "";
+  echo "Confirmacion de algif_aead en /proc/modules:";
+  grep algif_aead /proc/modules || echo "algif_aead NO aparece cargado";
+} | tee evidence/hito1_vuln_confirmed.txt
+EOF

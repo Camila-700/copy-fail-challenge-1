@@ -44,3 +44,42 @@ uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(su
 
 Resultado:
 Despues de actualizar el kernel, el exploit ya no obtiene root. El usuario permanece como camila.
+
+cat >> evidence/hito4_patched.txt <<'EOF'
+
+=== COMANDOS REGISTRADOS EN HISTORIAL / USADOS PARA ESTA EVIDENCIA ===
+
+sudo rm /etc/modprobe.d/disable-algif.conf
+sudo modprobe algif_aead
+lsmod | grep algif_aead || echo "algif_aead NO cargado"
+
+sudo rm /etc/modprobe.d/disable-algif.conf
+sudo modprobe algif_aead
+
+{
+  echo "=== HITO 4: ESTADO ANTES DEL PARCHE PERMANENTE ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Hostname:";
+  hostname;
+  echo "";
+  echo "Kernel antes de actualizar:";
+  uname -r;
+  echo "";
+  echo "Identidad:";
+  whoami;
+  id;
+  echo "";
+  echo "Estado de algif_aead antes de actualizar:";
+  lsmod | grep algif_aead || echo "algif_aead NO cargado";
+  echo "";
+  echo "Nota:";
+  echo "Se removio el bloqueo temporal disable-algif.conf y se recargo algif_aead para probar el parche/update de forma justa.";
+} | tee evidence/hito4_antes_update.txt
+
+history | grep -E "hito|algif|copy_fail|rmmod|modprobe|uname|lsmod|sha256|REPORT|evidence"
+
+Nota:
+El historial pegado confirma la preparacion del Hito 4 antes del update/parche. La evidencia final hito4_patched.txt muestra el resultado posterior: kernel actualizado, sin disable-algif.conf, algif_aead cargado y exploit fallando.
+EOF

@@ -51,3 +51,39 @@ uid=1000(camila) gid=1000(camila) groups=1000(camila),24(cdrom),25(floppy),27(su
 Resultado:
 El exploit falla despues de bloquear algif_aead con install algif_aead /bin/false.
 Interpretacion: el error FileNotFoundError es esperado porque algif_aead fue bloqueado; el exploit fallo y el usuario permanecio como camila, no root.
+
+cat >> evidence/hito3_mitigation.txt <<'EOF'
+
+=== COMANDOS REGISTRADOS EN HISTORIAL / USADOS PARA ESTA EVIDENCIA ===
+
+sudo sh -c 'echo "install algif_aead /bin/false" > /etc/modprobe.d/disable-algif.conf'
+sudo rmmod algif_aead 2>/dev/null || true
+sudo sh -c 'echo "install algif_aead /bin/false" > /etc/modprobe.d/disable-algif.conf'
+lsmod | grep algif_aead || echo "algif_aead NO cargado - mitigacion activa"
+python3 copy_fail_exp.py
+
+{
+  echo "";
+  echo "=== VERIFICACION ADICIONAL: BLOQUEO PERSISTENTE DEL MODULO ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Regla creada en /etc/modprobe.d/disable-algif.conf:";
+  cat /etc/modprobe.d/disable-algif.conf;
+  echo "";
+  echo "Estado del modulo despues del bloqueo:";
+  lsmod | grep algif_aead || echo "algif_aead NO cargado - mitigacion activa";
+  echo "";
+  echo "Intento de exploit con modulo bloqueado:";
+  python3 copy_fail_exp.py 2>&1 | head -20;
+  echo "";
+  echo "Identidad despues del intento:";
+  whoami;
+  id;
+  echo "";
+  echo "Resultado:";
+  echo "El exploit falla despues de bloquear algif_aead con install algif_aead /bin/false.";
+} >> evidence/hito3_mitigation.txt
+
+echo "Interpretacion: el error FileNotFoundError es esperado porque algif_aead fue bloqueado; el exploit fallo y el usuario permanecio como camila, no root." >> evidence/hito3_mitigation.txt
+EOF

